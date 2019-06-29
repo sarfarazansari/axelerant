@@ -1,0 +1,9 @@
+:host {
+  .block-list:nth-child(even){
+    background-color: #D5D7D9;
+  }
+  .block-list{
+    border-bottom: 1px solid #f8f9fa;
+    padding: .8rem 0;
+  }
+}

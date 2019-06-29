@@ -1,0 +1,47 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <section class="container">
+      <a class="navbar-brand" href="javascript:void(0)">Axelerant</a>
+      <form class="form-inline my-2 my-lg-0">
+        <input name="search" [(ngModel)]="searchText" class="form-control mr-sm-2" type="search" placeholder="SEARCH EVENTS" aria-label="SEARCH EVENTS">
+      </form>
+    </section>
+  </nav>
+</header>
+<section class="pt-4">
+
+  <ng-container *ngIf="eventList && eventList.length > 0">
+    <cdk-virtual-scroll-viewport itemSize="63" [ngStyle]="{'height': psObj.innerBoxH, 'width': psObj.innerBoxW}">
+      <section class="container">
+        <!-- No result block -->
+        <p class="lead text-center" *ngIf="(eventList | myEventPipe:searchText).length === 0">
+          No Results Found!
+        </p>
+        <!-- No result block end -->
+
+        <!-- results block -->
+        <section class="row block-list align-items-center"
+        *cdkVirtualFor="let item of eventList | myEventPipe:searchText;">
+          <div class="col-md-3 col-lg-3 col-sm-1">{{item.name}}</div>
+          <div class="col-md-3 col-lg-3 col-sm-1">{{item.date}}</div>
+          <div class="col-md-3 col-lg-3 col-sm-1">
+            <img [src]="item.image" width="36" height="36" alt="" />
+          </div>
+          <div class="col-md-3 col-lg-3 col-sm-1 text-right">
+            <span class="mr-2">Seats Left - {{item.seats}}</span>
+            <span>
+              <ng-container *ngIf="item.seats === 0">
+                <button class="btn btn-sm btn-outline-warning">Sold Out!</button>
+              </ng-container>
+              <ng-container *ngIf="item.seats > 0">
+                <button (click)="goToEvent(item)" class="btn btn-sm btn-outline-primary">Book Now</button>
+              </ng-container>
+            </span>
+          </div>
+        </section>
+        <!-- end rows -->
+      </section>
+    </cdk-virtual-scroll-viewport>
+  </ng-container>
+
+</section>

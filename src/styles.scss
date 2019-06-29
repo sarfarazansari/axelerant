@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+// define some vars to override bootstrap style
+$font-family-sans-serif: 'Lato', sans-serif;
+$font-family-monospace:  "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+$font-family-base: $font-family-sans-serif !default;
+$font-size-base: 1rem;
+$input-border: #D5D7D9;
+$input-color: #333;
+$input-color-placeholder: #777;
+
+$body-bg: #fff;
+// $body-color: #333;
+$text-color: #333;
+$theme-colors: (
+  "primary": #3481CF,
+  "secondary": #778A96,
+  "success": #3CC480,
+  "info": #19b6e5,
+  "warning": #fc8e30,
+  "danger": #F15340,
+  "muted": #6c757d
+);
+
+// Bootstrap and its default variables
+@import "node_modules/bootstrap/scss/bootstrap";
+
+body {
+  font-variant-ligatures: common-ligatures;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  color: $text-color;
+  font-display: swap; // Basically FOUT
+}

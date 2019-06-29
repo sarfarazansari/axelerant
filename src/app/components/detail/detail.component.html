@@ -1,0 +1,116 @@
+<ng-container *ngIf="!selectedEvent">
+  loading...
+</ng-container>
+<ng-container *ngIf="selectedEvent">
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <section class="container">
+      <a class="navbar-brand" href="javascript:void(0)">{{selectedEvent.name}}</a>
+    </section>
+  </nav>
+</header>
+<section class="container pt-4">
+  <p class="lead">Number of available seats - {{selectedEvent.seats}}</p>
+
+  <!-- form block -->
+  <section class="block block-form">
+    <ng-container *ngIf="formSubmitSuccess">
+      <p class="lead text-center text-success">
+        {{ successMsg }}
+      </p>
+    </ng-container>
+    <ng-container *ngIf="!formSubmitSuccess">
+
+    <form [formGroup]="bookingForm" (ngSubmit)="handleFormSubmit()" novalidate>
+      <div class="form-group">
+        <label for="username">User Name</label>
+        <input type="text" class="form-control" id="username" formControlName="username" aria-describedby="usernameHelp" placeholder="Enter Username" required>
+        <ng-container *ngIf="bookingForm.controls['username'].errors && bookingForm.controls['username'].dirty">
+          <small id="usernameHelp" class="form-text text-danger">
+            <ng-container *ngIf="bookingForm.controls['username'].errors.required">Please enter your name</ng-container>
+            <ng-container *ngIf="bookingForm.controls['username'].errors.pattern">Only letters and spaces are allowed</ng-container>
+          </small>
+        </ng-container>
+      </div>
+      <!-- end username block -->
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" formControlName="email"  id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+        <ng-container *ngIf="bookingForm.controls['email'].errors && bookingForm.controls['email'].dirty">
+          <small id="emailHelp" class="form-text text-danger">
+            <ng-container *ngIf="bookingForm.controls['email'].errors.required">Please enter your email</ng-container>
+            <ng-container *ngIf="bookingForm.controls['email'].errors.pattern">Invalid email</ng-container>
+          </small>
+        </ng-container>
+      </div>
+
+      <!-- end email block -->
+
+      <div class="form-group">
+        <label for="email">Phone Number</label>
+        <input type="text" minlength="10" maxlength="10" class="form-control" formControlName="phone"  id="phone" aria-describedby="phoneHelp" placeholder="Enter phone" required>
+        <ng-container *ngIf="bookingForm.controls['phone'].errors && bookingForm.controls['phone'].dirty">
+          <small id="phoneHelp" class="form-text text-danger">
+            <ng-container
+            *ngIf="bookingForm.controls['phone'].errors.required ||
+            bookingForm.controls['phone'].errors.minlength"
+            >Please enter 10 digit phone number</ng-container>
+            <ng-container *ngIf="bookingForm.controls['phone'].errors.pattern && !bookingForm.controls['phone'].errors.minlength">Only numbers allowed</ng-container>
+          </small>
+        </ng-container>
+      </div>
+
+      <!-- end phone block -->
+
+      <div class="form-group">
+        <label for="seats">Select seats</label>
+        <select id="seats" aria-describedby="seatsHelp" class="form-control" formControlName="seats" required>
+          <option disabled [value]="null">-- Select --</option>
+          <option *ngFor="let seats of availableSeats" [value]="seats">{{seats}}</option>
+        </select>
+        <ng-container *ngIf="bookingForm.controls['seats'].errors && bookingForm.controls['seats'].dirty">
+          <small id="seatsHelp" class="form-text text-danger">
+            <ng-container *ngIf="bookingForm.controls['seats'].errors.required">Please enter number of seats</ng-container>
+          </small>
+        </ng-container>
+      </div>
+      <!-- end of select seat block -->
+
+      <!-- start of dynamic block -->
+      <ng-container *ngIf="attendees">
+        <div class="form-group" formArrayName="attendees" *ngFor="let item of bookingForm.get('attendees').controls; let i = index;">
+          <label for="some_{{i}}">Name of the attendee {{i+1}}</label>
+          <input class="form-control" id="some_{{i}}" name="{{i}}" type="text" formControlName="{{i}}" />
+          <ng-container
+          *ngIf="bookingForm.controls['attendees'].controls[i].errors
+          && bookingForm.controls['attendees'].controls[i].dirty">
+            <small class="form-text text-danger">
+              <ng-container *ngIf="bookingForm.controls['attendees'].controls[i].errors.required">Please enter the name of Attendee {{i+1}}</ng-container>
+            </small>
+          </ng-container>
+        </div>
+
+      </ng-container>
+      <!-- end of dynamic block -->
+
+      <button type="submit" [disabled]="!bookingForm.valid" class="btn btn-primary mr-2" >Submit</button>
+      <button type="button" (click)="goToEventListingPage()" class="btn btn-dark">Cancel</button>
+    </form>
+    </ng-container>
+
+    <p class="lead text-center">
+      form status: {{bookingForm.status}}
+    </p>
+
+  </section>
+  <!-- form block -->
+</section>
+</ng-container>
+
+
+<!-- <mat-form-field class="full-width">
+          <input matInput placeholder="Full Name" formControlName="fullname" required>
+          <mat-error *ngFor="let validation of validation_messages.fullname">
+            <mat-error class="error-message" *ngIf="userDetailsForm.get('fullname').hasError(validation.type) && (userDetailsForm.get('fullname').dirty || userDetailsForm.get('fullname').touched)">{{validation.message}}</mat-error>
+          </mat-error>
+        </mat-form-field> -->
